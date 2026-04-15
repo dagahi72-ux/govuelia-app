@@ -24,7 +24,7 @@ export default function Home() {
       </h2>
 
       <button 
-        onClick={() => window.open("https://www.google.com", "_blank")}
+        onClick={() => window.open("https://www.skyscanner.com/transport/flights/", "_blank")}
         style={{
           padding: "14px 28px",
           fontSize: "16px",
