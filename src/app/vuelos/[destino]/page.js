@@ -1,17 +1,7 @@
-"use client";
-
-export default function Page(props) {
-  const destino = props.params.destino;
-
+export default function Page({ params }) {
   return (
     <main>
-      <h1>Vuelos a {destino}</h1>
-
-      <button onClick={() => 
-        window.open(`https://www.google.com/search?q=vuelos+a+${destino}`, "_blank")
-      }>
-        Buscar vuelos
-      </button>
+      <h1>Vuelos a {params.destino}</h1>
     </main>
   );
 }
