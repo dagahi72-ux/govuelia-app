@@ -1,5 +1,11 @@
-export default async function Page({ params }) {
-  const destino = params.destino;
+"use client";
+
+import { usePathname } from "next/navigation";
+
+export default function Page() {
+  const pathname = usePathname();
+
+  const destino = pathname.split("/vuelos/")[1];
 
   return (
     <main>
