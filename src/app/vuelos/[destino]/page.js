@@ -1,7 +1,9 @@
-export default function Page({ params }) {
+export default function Page(props) {
+  const destino = props.params.destino;
+
   return (
     <main>
-      <h1>Vuelos a {params.destino}</h1>
+      <h1>Vuelos a {destino}</h1>
     </main>
   );
 }
