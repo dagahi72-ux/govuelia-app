@@ -1,3 +1,10 @@
-export default function Page({ params }) {
-  return <h1>Vuelos a {params.destino}</h1>;
+"use client";
+
+export default function Home() {
+  return (
+    <main>
+      <h1>✈️ Govuelia</h1>
+      <a href="/vuelos/madrid">Buscar vuelos</a>
+    </main>
+  );
 }
