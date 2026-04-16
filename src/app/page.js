@@ -6,10 +6,12 @@ export default function Home() {
   const [destino, setDestino] = useState("");
 
   const buscar = () => {
-    if (destino.trim() !== "") {
-      window.location.href = `/vuelos/${destino.toLowerCase()}`;
-    }
-  };
+  const limpio = destino.trim().toLowerCase();
+
+  if (limpio !== "") {
+    window.location.href = `/vuelos/${limpio}`;
+  }
+};
 
   return (
     <main style={{
