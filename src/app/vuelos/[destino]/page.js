@@ -1,5 +1,5 @@
-export default function Page(props) {
-  const destino = props.params.destino;
+export default async function Page({ params }) {
+  const destino = params.destino;
 
   return (
     <main>
