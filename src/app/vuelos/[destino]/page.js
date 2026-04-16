@@ -1,3 +1,3 @@
-export default function Home() {
-  return <h1>HOME FUNCIONANDO</h1>;
+export default function Page({ params }) {
+  return <h1>Vuelos a {params.destino}</h1>;
 }
