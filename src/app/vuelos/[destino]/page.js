@@ -1,7 +1,7 @@
 "use client";
 
-export default function Page({ params }) {
-  const destino = params.destino;
+export default function Page(props) {
+  const destino = props.params.destino;
 
   return (
     <main>
