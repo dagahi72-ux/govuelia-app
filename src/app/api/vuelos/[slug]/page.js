@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { aeropuertos } from "./data/aeropuertos";
+import { aeropuertos } from "./vuelos/data/aeropuertos";
 
 /* 🌍 FLAGS */
 const getFlag = (country) => {
@@ -24,53 +24,46 @@ export default function Home() {
   const [sugOri, setSugOri] = useState([]);
   const [sugDes, setSugDes] = useState([]);
 
-  /* 🔥 FILTRO (ARREGLADO) */
+  /* 🔍 FILTRO SEGURO (FIX ERROR) */
   const filtrar = (valor) => {
     if (!valor) return [];
 
-    return aeropuertos.filter((a) =>
-      (a.search || "").toLowerCase().includes(valor.toLowerCase())
-    );
+    return aeropuertos
+      .filter((a) => {
+        if (!a) return false;
+
+        const code = (a.code || "").toLowerCase();
+        const name = (a.name || "").toLowerCase();
+
+        return (
+          code.includes(valor.toLowerCase()) ||
+          name.includes(valor.toLowerCase())
+        );
+      })
+      .slice(0, 5);
   };
 
-  /* 🔍 HANDLERS */
+  /* ✍️ INPUT HANDLERS */
   const handleOrigen = (e) => {
-    const val = e.target.value;
-    setOrigen(val);
-    setSugOri(filtrar(val));
+    const valor = e.target.value;
+    setOrigen(valor);
+    setSugOri(filtrar(valor));
   };
 
   const handleDestino = (e) => {
-    const val = e.target.value;
-    setDestino(val);
-    setSugDes(filtrar(val));
+    const valor = e.target.value;
+    setDestino(valor);
+    setSugDes(filtrar(valor));
   };
 
-  const seleccionarOrigen = (a) => {
-    if (!a?.iata) return;
-    setOrigen(`${a.city} (${a.iata})`);
-    setSugOri([]);
-  };
-
-  const seleccionarDestino = (a) => {
-    if (!a?.iata) return;
-    setDestino(`${a.city} (${a.iata})`);
-    setSugDes([]);
-  };
-
-  /* 🚀 BUSCAR (ARREGLADO) */
+  /* 🚀 BUSCAR */
   const buscar = () => {
-    const oriCode = origen.match(/\((.*?)\)/)?.[1];
-    const desCode = destino.match(/\((.*?)\)/)?.[1];
+    if (!origen || !destino) return;
 
-    if (!oriCode || !desCode) {
-      alert("Seleccioná origen y destino desde la lista");
-      return;
-    }
+    const o = origen.slice(0, 3).toUpperCase();
+    const d = destino.slice(0, 3).toUpperCase();
 
-    const hoy = new Date().toISOString().split("T")[0];
-
-    window.location.href = `/explorar/${oriCode}-${desCode}?ida=${hoy}`;
+    window.location.href = `/explorar/${o}-${d}?ida=2026-04-22`;
   };
 
   return (
@@ -81,9 +74,9 @@ export default function Home() {
         {/* ORIGEN */}
         <div style={inputBox}>
           <input
-            placeholder="Origen"
             value={origen}
             onChange={handleOrigen}
+            placeholder="Origen"
             style={input}
           />
 
@@ -93,15 +86,15 @@ export default function Home() {
                 <div
                   key={i}
                   style={item}
-                  onClick={() => seleccionarOrigen(a)}
+                  onClick={() => {
+                    setOrigen(a.code);
+                    setSugOri([]);
+                  }}
                 >
                   <span>{getFlag(a.country)}</span>
-                  <div>
-                    <div>{a.city}</div>
-                    <div style={sub}>
-                      {a.name} • {a.iata}
-                    </div>
-                  </div>
+                  <span style={{ marginLeft: 8 }}>
+                    {a.code} - {a.name}
+                  </span>
                 </div>
               ))}
             </div>
@@ -111,9 +104,9 @@ export default function Home() {
         {/* DESTINO */}
         <div style={inputBox}>
           <input
-            placeholder="Destino"
             value={destino}
             onChange={handleDestino}
+            placeholder="Destino"
             style={input}
           />
 
@@ -123,23 +116,24 @@ export default function Home() {
                 <div
                   key={i}
                   style={item}
-                  onClick={() => seleccionarDestino(a)}
+                  onClick={() => {
+                    setDestino(a.code);
+                    setSugDes([]);
+                  }}
                 >
                   <span>{getFlag(a.country)}</span>
-                  <div>
-                    <div>{a.city}</div>
-                    <div style={sub}>
-                      {a.name} • {a.iata}
-                    </div>
-                  </div>
+                  <span style={{ marginLeft: 8 }}>
+                    {a.code} - {a.name}
+                  </span>
                 </div>
               ))}
             </div>
           )}
         </div>
 
+        {/* BOTÓN */}
         <button style={btn} onClick={buscar}>
-          Buscar viaje
+          Buscar vuelos
         </button>
       </div>
     </div>
@@ -149,19 +143,19 @@ export default function Home() {
 /* 🎨 ESTILOS */
 
 const page = {
+  background: "#f6f7fb",
+  height: "100vh",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  height: "100vh",
-  background: "#f1f3f4",
 };
 
 const box = {
   background: "white",
   padding: 30,
-  borderRadius: 12,
+  borderRadius: 16,
   width: 400,
-  boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+  boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
 };
 
 const title = {
@@ -182,35 +176,29 @@ const input = {
 
 const dropdown = {
   position: "absolute",
-  top: 45,
+  top: 40,
   width: "100%",
   background: "white",
   borderRadius: 8,
-  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+  boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
   zIndex: 10,
-  maxHeight: 200,
-  overflowY: "auto",
 };
 
 const item = {
-  display: "flex",
-  gap: 10,
   padding: 10,
   cursor: "pointer",
-};
-
-const sub = {
-  fontSize: 12,
-  color: "#666",
+  display: "flex",
+  alignItems: "center",
 };
 
 const btn = {
   marginTop: 10,
   width: "100%",
   padding: 12,
+  borderRadius: 10,
+  border: "none",
   background: "#1a73e8",
   color: "white",
-  border: "none",
-  borderRadius: 8,
+  fontWeight: "bold",
   cursor: "pointer",
 };
