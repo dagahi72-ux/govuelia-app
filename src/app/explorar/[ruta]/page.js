@@ -1,5 +1,6 @@
 "use client";
 
+import CrearAlerta from "@/components/CrearAlerta";
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 
@@ -32,7 +33,6 @@ export default function ExplorarPage() {
 
         const data = await res.json();
 
-        // 🔥 CLAVE: validar estructura SIEMPRE
         const lista = Array.isArray(data)
           ? data
           : Array.isArray(data.vuelos)
@@ -107,6 +107,9 @@ export default function ExplorarPage() {
             </div>
           ))}
         </div>
+
+        {/* 🔥 INPUT DE ALERTA */}
+        <CrearAlerta />
       </div>
     </div>
   );
