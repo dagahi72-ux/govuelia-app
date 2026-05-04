@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
 
@@ -5,7 +7,6 @@ export async function GET(req) {
   const destino = searchParams.get("destino");
   const fecha = searchParams.get("ida");
 
-  // 🔥 FORZAMOS FAKE (para testear)
   return Response.json({
     vuelos: generarVuelosFake(origen, destino, fecha),
     source: "fake"
