@@ -4,17 +4,22 @@ export async function POST(req) {
   try {
     const body = await req.json();
 
-    const busqueda = await prisma.busqueda.create({
-      data: {
-        origen: body.origen,
-        destino: body.destino,
-        fecha: body.fecha,
-        precio: body.precio || null,
-      },
-    });
+    const { error } = await supabase
+      .from("busquedas")
+      .insert([
+        {
+          origen: body.origen,
+          destino: body.destino,
+          fecha: body.fecha,
+          precio: body.precio || null,
+        },
+      ]);
 
-    return Response.json(busqueda);
+    if (error) throw error;
+
+    return Response.json({ ok: true });
   } catch (error) {
+    console.error(error);
     return Response.json({ error: "Error guardando" }, { status: 500 });
   }
 }
