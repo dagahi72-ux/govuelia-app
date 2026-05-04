@@ -1,11 +1,19 @@
-import CrearAlerta from "@/components/CrearAlerta";
+{loading ? (
+  <p>Buscando vuelos...</p>
+) : (
+  <div>
+    {source !== "real" && (
+      <p style={{ color: "orange" }}>
+        Mostrando precios estimados
+      </p>
+    )}
 
-export default function Home() {
-  return (
-    <main>
-      <h1>Buscador de vuelos ✈️</h1>
-
-      <CrearAlerta />
-    </main>
-  );
-}
+    {vuelos.map((vuelo) => (
+      <div key={vuelo.id}>
+        ✈️ {vuelo.origen} → {vuelo.destino}
+        <p>{vuelo.aerolinea}</p>
+        <p>${vuelo.precio}</p>
+      </div>
+    ))}
+  </div>
+)}

@@ -1,26 +1,39 @@
-import { prisma } from "../../../lib/prisma";
-
-export async function GET() {
-  try {
-    const alertas = await prisma.alerta.findMany();
-    return Response.json(alertas);
-  } catch (error) {
-    console.error("ERROR GET ALERTAS:", error);
-    return Response.json({ error: "Error interno" }, { status: 500 });
-  }
-}
+import { supabase } from "@/lib/supabase";
 
 export async function POST(req) {
   try {
     const body = await req.json();
 
-    const alerta = await prisma.alerta.create({
-      data: body,
-    });
+    const { data, error } = await supabase
+      .from("alertas")
+      .insert([
+        {
+          origen: body.origen,
+          destino: body.destino,
+          precio_objetivo: body.precio,
+          email: body.email,
+        },
+      ])
+      .select();
 
-    return Response.json(alerta);
-  } catch (error) {
-    console.error("ERROR POST ALERTA:", error);
-    return Response.json({ error: "Error creando alerta" }, { status: 500 });
+    if (error) throw error;
+
+    return Response.json({ ok: true, alerta: data[0] });
+  } catch (err) {
+    console.error(err);
+    return Response.json({ ok: false, error: err.message });
   }
+}
+
+export async function GET() {
+  const { data, error } = await supabase
+    .from("alertas")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    return Response.json({ ok: false });
+  }
+
+  return Response.json({ alertas: data });
 }
