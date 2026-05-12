@@ -7,21 +7,29 @@ export async function GET(req) {
   const destino = searchParams.get("destino") || "MAD";
   const fecha = searchParams.get("ida") || "2026-05-04";
 
-  const aerolineas = ["Iberia", "Air Europa", "LATAM", "Level"];
-
-  const vuelos = Array.from({ length: 5 }).map((_, i) => ({
-    id: i + 1,
-    origen,
-    destino,
-    fecha,
-    aerolinea: aerolineas[Math.floor(Math.random() * aerolineas.length)],
-    precio: 700 + Math.floor(Math.random() * 300),
-    duracion: `${10 + Math.floor(Math.random() * 3)}h`,
-    escalas: Math.random() > 0.5 ? 0 : 1,
-  }));
-
   return Response.json({
-    vuelos,
-    source: "fake"
+    vuelos: [
+      {
+        id: 1,
+        origen,
+        destino,
+        fecha,
+        aerolinea: "Iberia",
+        precio: 899,
+        duracion: "11h",
+        escalas: 0,
+      },
+      {
+        id: 2,
+        origen,
+        destino,
+        fecha,
+        aerolinea: "LATAM",
+        precio: 940,
+        duracion: "12h",
+        escalas: 1,
+      },
+    ],
+    source: "FIXED"
   });
 }
