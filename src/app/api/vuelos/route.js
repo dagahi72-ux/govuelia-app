@@ -1,11 +1,11 @@
 export const dynamic = "force-dynamic";
 
-export async function GET(req) {
-  const { searchParams } = new URL(req.url);
+export async function GET(request) {
+  const url = new URL(request.url);
 
-  const origen = searchParams.get("origen") || "EZE";
-  const destino = searchParams.get("destino") || "MAD";
-  const fecha = searchParams.get("ida") || "2026-05-04";
+  const origen = url.searchParams.get("origen") || "EZE";
+  const destino = url.searchParams.get("destino") || "MAD";
+  const fecha = url.searchParams.get("ida") || "2026-05-04";
 
   return Response.json({
     vuelos: [
