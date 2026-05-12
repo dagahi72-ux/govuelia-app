@@ -32,6 +32,6 @@ export async function GET(request) {
         fecha,
       },
     ],
-    source: "FIXED"
+    source: "FIXED",
   });
 }
