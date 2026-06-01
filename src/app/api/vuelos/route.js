@@ -19,6 +19,7 @@ export async function GET(request) {
         horaLlegada: "14:10",
         precio: 899,
         fecha,
+        escalas: 0,
       },
       {
         id: 2,
@@ -30,6 +31,7 @@ export async function GET(request) {
         horaLlegada: "09:20",
         precio: 940,
         fecha,
+        escalas: 1,
       },
     ],
     source: "FIXED",
