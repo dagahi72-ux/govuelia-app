@@ -103,13 +103,36 @@ export default function ExplorarRutaPage() {
                 {vuelo.origen} → {vuelo.destino}
               </h3>
               <p>✈️ {vuelo.aerolinea}</p>
-              <p>💰 ${vuelo.precio}</p>
-              <p>⏱️ {vuelo.duracion}</p>
-              <p>
-                {vuelo.escalas === 0
-                  ? "Directo"
-                  : `${vuelo.escalas} escala(s)`}
-              </p>
+
+<p>💰 ${vuelo.precio}</p>
+
+<p>
+  ⏱️ {vuelo.duracion || "Vuelo programado"}
+</p>
+
+<p>
+  {vuelo.escalas === 0
+    ? "Directo"
+    : `${vuelo.escalas} escala(s)`}
+</p>
+
+<a
+  href="https://www.travelpayouts.com/?marker=535275"
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{
+    display: "inline-block",
+    marginTop: "12px",
+    background: "#1a73e8",
+    color: "#fff",
+    padding: "10px 18px",
+    borderRadius: "8px",
+    textDecoration: "none",
+    fontWeight: "bold",
+  }}
+>
+  Reservar
+</a>
             </div>
           ))}
         </div>
