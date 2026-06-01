@@ -130,7 +130,23 @@ export default function VuelosPage() {
 
                 <div style={right}>
                   <div style={price}>USD {precio}</div>
-                  <button style={btn}>Seleccionar</button>
+                  <a
+  href={`https://www.travelpayouts.com/?marker=535275`}
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{
+    display: "inline-block",
+    marginTop: 8,
+    background: "#1a73e8",
+    color: "white",
+    textDecoration: "none",
+    padding: "8px 16px",
+    borderRadius: 20,
+    fontWeight: "bold",
+  }}
+>
+  Reservar
+</a>
                 </div>
               </div>
             );
