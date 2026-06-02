@@ -1,41 +1,48 @@
 export const dynamic = "force-dynamic";
 
 export async function GET(request) {
-  const url = new URL(request.url);
+  try {
+    const { searchParams } = new URL(request.url);
 
-  const origen = url.searchParams.get("origen") || "EZE";
-  const destino = url.searchParams.get("destino") || "MAD";
-  const fecha = url.searchParams.get("ida") || "2026-05-04";
+    const origen = searchParams.get("origen") || "EZE";
+    const destino = searchParams.get("destino") || "MAD";
+    const fecha = searchParams.get("ida");
 
-  return Response.json({
-    vuelos: [
-      {
-        id: 1,
-        aerolinea: "Iberia",
-        vuelo: "IB6844",
-        salida: origen,
-        llegada: destino,
-        horaSalida: "22:30",
-        horaLlegada: "14:10",
-        precio: 899,
-        fecha,
-        escalas: 0,
-        duracion: "Vuelo programado",
-      },
-      {
-        id: 2,
-        aerolinea: "LATAM",
-        vuelo: "LA705",
-        salida: origen,
-        llegada: destino,
-        horaSalida: "18:45",
-        horaLlegada: "09:20",
-        precio: 940,
-        fecha,
-        escalas: 1,
-        duracion: "Vuelo programado",
-      },
-    ],
-    source: "FIXED",
-  });
+    const token = process.env.TRAVELPAYOUTS_API_TOKEN;
+
+    if (!token) {
+      return Response.json({
+        error: "Token no encontrado"
+      });
+    }
+
+    let apiUrl =
+      `https://api.travelpayouts.com/aviasales/v3/prices_for_dates` +
+      `?origin=${origen}` +
+      `&destination=${destino}` +
+      `&currency=usd` +
+      `&sorting=price` +
+      `&direct=false` +
+      `&limit=20`;
+
+    if (fecha) {
+      apiUrl += `&departure_at=${fecha}`;
+    }
+
+    apiUrl += `&token=${token}`;
+
+    const response = await fetch(apiUrl);
+
+    const data = await response.json();
+
+    return Response.json({
+      source: "AVIASALES",
+      data
+    });
+
+  } catch (error) {
+    return Response.json({
+      error: error.message
+    });
+  }
 }
